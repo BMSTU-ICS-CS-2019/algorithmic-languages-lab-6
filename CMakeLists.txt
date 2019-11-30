@@ -3,4 +3,4 @@ project(lab_6)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(lab_6 collections/queue.h collections/stack.h)
+add_executable(lab_6 collections/queue.h collections/stack.h collections/linked_list.h)
