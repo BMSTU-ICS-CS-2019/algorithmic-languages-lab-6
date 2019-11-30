@@ -2,6 +2,9 @@
 #define LAB_6_QUEUE_H
 
 #include <cstddef>
+#include <stdexcept>
+
+using std::out_of_range;
 
 namespace collections {
 
@@ -49,7 +52,9 @@ namespace collections {
             ++size_;
         }
 
-        T pop(const T default_value) {
+        T pop() {
+            if (size_ == 0) throw out_of_range("Queue is empty so nothing can be popped from it");
+
             const auto popped = first_;
             if (popped) {
                 first_ = popped->next_;
@@ -60,8 +65,35 @@ namespace collections {
 
                 --size_;
 
-
                 return value;
+            }
+        }
+
+        template <typename CONSUMER>
+        void for_each(const CONSUMER consumer) {
+            if (size_ == 0) return;
+
+            auto current = first_;
+            size_t index = 0;
+            while (current) {
+                consumer(current->value_);
+
+                current = current->next_;
+                ++index;
+            }
+        }
+
+        template <typename BI_CONSUMER>
+        void for_each_indexed(const BI_CONSUMER consumer) {
+            if (size_ == 0) return;
+
+            auto current = first_;
+            size_t index = 0;
+            while (current) {
+                consumer(index, current->value_);
+
+                current = current->next_;
+                ++index;
             }
         }
     };
