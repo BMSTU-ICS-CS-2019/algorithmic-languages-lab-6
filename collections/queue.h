@@ -1,5 +1,5 @@
-#ifndef LAB_6_queue_H
-#define LAB_6_queue_H
+#ifndef LAB_6_QUEUE_H
+#define LAB_6_QUEUE_H
 
 #include <cstddef>
 
@@ -67,4 +67,4 @@ namespace collections {
     };
 }
 
-#endif //LAB_6_queue_H
+#endif //LAB_6_QUEUE_H
