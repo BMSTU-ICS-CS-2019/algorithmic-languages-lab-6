@@ -270,7 +270,7 @@ namespace collections {
             push_last_node(new Node(value));
         }
 
-        void push_after(const T value, const T& previous) {
+        void push_after(const T &previous, const T value) {
             if (size_ == 0) return;
 
             auto current = first_;
@@ -285,7 +285,7 @@ namespace collections {
             }
         }
 
-        void push_before(const T value, const T &next) {
+        void push_before(const T &next, const T value) {
             if (size_ == 0) return;
 
             auto current = first_;
@@ -300,7 +300,7 @@ namespace collections {
             }
         }
 
-        void push_at(const T value, const size_t index) {
+        void push_at(const size_t index, const T value) {
             const auto size = size_;
 
             if (index == 0) push_first_node(new Node(value));
