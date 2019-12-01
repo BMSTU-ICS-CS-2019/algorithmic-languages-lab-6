@@ -345,18 +345,20 @@ namespace collections {
             return pop_last_node();
         }
 
-        void pop_one(const T &value) {
-            if (size_ == 0) return;
+        bool pop(const T &value) {
+            if (size_ == 0) return false;
 
             auto current = first_;
             while (current) {
                 if (current->value_ == value) {
                     pop_node_no_return(current);
-                    return;
+                    return true;
                 }
 
                 current = current->next_;
             }
+
+            return true;
         }
 
         T pop_at(const size_t index) {
