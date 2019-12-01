@@ -31,6 +31,7 @@ int main() {
             cout << "Have a nice day ;)" << endl;
             return 0;
         }
+        else cout << "Unknown mode" << endl;
     }
 }
 
@@ -56,6 +57,7 @@ void queue_repl() noexcept {
                 cout << "[" << index << "] = " << value << endl;
             });
         else if (action == "exit") break;
+        else cout << "Unknown action" << endl;
     }
 }
 
@@ -81,6 +83,7 @@ void stack_repl() noexcept {
             cout << "[" << index << "] = " << value << endl;
         });
         else if (action == "exit") break;
+        else cout << "Unknown action" << endl;
     }
 }
 
