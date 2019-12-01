@@ -107,7 +107,7 @@ void linked_list_repl() noexcept {
         MAIN_CLI_READ_VALUE_WITH_MESSAGE(
                 string, action,
                 "Enter action (`push_first`, `push_last`, `push_after`, `push_before`, `push_at`, "
-                "`pop_first`, `pop_last`, `pop_at`, `pop_one`, `contains`, `index_of`, `size`, `print` or `exit`)"
+                "`pop_first`, `pop_last`, `pop_at`, `pop`, `contains`, `index_of`, `size`, `print` or `exit`)"
         )
         if (action == "push_first") {
             MAIN_CLI_READ_VALUE(string, value)
@@ -165,9 +165,9 @@ void linked_list_repl() noexcept {
                 continue;
             }
             cout << "Popped \"" << popped << "\"" << endl;
-        } else if (action == "pop_one") {
+        } else if (action == "pop") {
             MAIN_CLI_READ_VALUE(string, value)
-            list.pop_one(value);
+            list.pop(value);
             cout << "Popped \"" << value << "\"" << endl;
         } else if (action == "contains") {
             MAIN_CLI_READ_VALUE(string, value)
