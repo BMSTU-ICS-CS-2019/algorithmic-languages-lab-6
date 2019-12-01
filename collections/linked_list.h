@@ -89,7 +89,7 @@ namespace collections {
             ++size_;
         }
 
-        inline void push_before_node(const Node *next, const Node *pushed) {
+        inline void push_before_node(Node * const next, Node * const pushed) {
             const auto old_previous = next->previous_;
             if (old_previous) old_previous->next_ = pushed;
             else first_ = pushed;
