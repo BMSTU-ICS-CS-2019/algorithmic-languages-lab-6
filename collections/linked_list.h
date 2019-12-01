@@ -374,7 +374,7 @@ namespace collections {
             return false;
         }
 
-        size_t indexOf(const T &value) const {
+        size_t index_of(const T &value) const {
             auto current = first_;
             size_t index = 0;
             while (current) {
