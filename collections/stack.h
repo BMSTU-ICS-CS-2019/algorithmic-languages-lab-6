@@ -8,27 +8,27 @@ using std::out_of_range;
 namespace collections {
 
     template <typename T>
-    class stack {
+    class Stack {
 
         /* ***************************************** Implementation details ***************************************** */
 
-        class node {
+        class Node {
 
-            friend class stack;
+            friend class Stack;
 
             T value;
-            node *next = nullptr;
+            Node *next = nullptr;
 
-            explicit node(const T value): value(value) {}
+            explicit Node(const T value): value(value) {}
         };
 
         size_t size_ = 0;
-        node *first_ = nullptr;
+        Node *first_ = nullptr;
 
         /* ********************************************** API members ********************************************** */
     public:
 
-        ~stack() {
+        ~Stack() {
             auto current = first_;
             while (current) {
                 const auto next = current->next;
@@ -42,7 +42,7 @@ namespace collections {
         }
 
         void push(const T value) {
-            const auto pushed = new node(value);
+            const auto pushed = new Node(value);
             pushed->next = first_;
             first_ = pushed;
 

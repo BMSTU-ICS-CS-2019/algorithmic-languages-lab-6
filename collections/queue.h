@@ -9,27 +9,27 @@ using std::out_of_range;
 namespace collections {
 
     template <typename T>
-    class queue {
+    class Queue {
 
         /* ***************************************** Implementation details ***************************************** */
 
-        class node {
+        class Node {
 
-            friend class queue;
+            friend class Queue;
 
             T value;
-            node *next = nullptr;
+            Node *next = nullptr;
 
-            explicit node(const T value): value(value) {}
+            explicit Node(const T value): value(value) {}
         };
 
         size_t size_ = 0;
-        node *first_ = nullptr, *last_ = nullptr;
+        Node *first_ = nullptr, *last_ = nullptr;
 
         /* ********************************************** API members ********************************************** */
     public:
 
-        ~queue() {
+        ~Queue() {
             auto current = first_;
             while (current) {
                 const auto next = current->next;
@@ -43,7 +43,7 @@ namespace collections {
         }
 
         void push(const T value) {
-            const auto pushed = new node(value);
+            const auto pushed = new Node(value);
             if (first_) {
                 last_->next = pushed;
                 last_ = pushed;

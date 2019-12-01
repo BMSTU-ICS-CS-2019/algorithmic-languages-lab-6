@@ -9,26 +9,26 @@ using std::out_of_range;
 namespace collections {
 
     template <typename T>
-    class linked_list {
+    class LinkedList {
 
         /* ***************************************** Implementation details ***************************************** */
 
-        class node {
+        class Node {
 
-            friend class linked_list;
+            friend class LinkedList;
 
             T value;
-            node *previous = nullptr, *next = nullptr;
+            Node *previous = nullptr, *next = nullptr;
 
-            explicit node(const T value): value(value) {}
+            explicit Node(const T value): value(value) {}
         };
 
         size_t size_ = 0;
-        node *first_ = nullptr, *last_ = nullptr;
+        Node *first_ = nullptr, *last_ = nullptr;
 
     protected:
 
-        node * node_at(const size_t index) const {
+        Node * node_at(const size_t index) const {
             const auto size = size_;
 
             if (index >= size) throw out_of_range("Index is out of range");
@@ -54,7 +54,7 @@ namespace collections {
             }
         }
 
-        inline void push_first_node(node * const pushed) {
+        inline void push_first_node(Node * const pushed) {
             if (size_ == 0) first_ = last_ = pushed;
             else {
                 // double-link head
@@ -66,7 +66,7 @@ namespace collections {
             ++size_;
         }
 
-        inline void push_last_node(node * const pushed) {
+        inline void push_last_node(Node * const pushed) {
             if (size_ == 0) first_ = last_ = pushed;
             else {
                 pushed->previous = last_;
@@ -77,7 +77,7 @@ namespace collections {
             ++size_;
         }
 
-        inline void push_after_node(node * const previous, node * const pushed) {
+        inline void push_after_node(Node * const previous, Node * const pushed) {
             const auto old_next = previous->next;
             if (old_next) old_next->previous = pushed;
             else last_ = pushed;
@@ -89,7 +89,7 @@ namespace collections {
             ++size_;
         }
 
-        inline void push_before_node(const node *next, const node *pushed) {
+        inline void push_before_node(const Node *next, const Node *pushed) {
             const auto old_previous = next->previous;
             if (old_previous) old_previous->next = pushed;
             else first_ = pushed;
@@ -193,7 +193,7 @@ namespace collections {
             }
         }
 
-        inline T pop_node(const node *popped) {
+        inline T pop_node(const Node *popped) {
             const auto first = first_;
             if (popped == first) {
                 if (popped == last_) first_ = last_ = nullptr; // pop the only one
@@ -220,7 +220,7 @@ namespace collections {
             return value;
         }
 
-        inline void pop_node_no_return(const node * popped) {
+        inline void pop_node_no_return(const Node * popped) {
             const auto first = first_;
             if (popped == first) {
                 if (popped == last_) first_ = last_ = nullptr; // pop the only one
@@ -249,7 +249,7 @@ namespace collections {
         /* ********************************************** API members ********************************************** */
     public:
 
-        ~linked_list() {
+        ~LinkedList() {
             auto current = first_;
             while (current) {
                 const auto next = current->next;
@@ -263,11 +263,11 @@ namespace collections {
         }
 
         void push_first(const T value) {
-            push_first_node(new node(value));
+            push_first_node(new Node(value));
         }
 
         void push_last(const T value) {
-            push_last_node(new node(value));
+            push_last_node(new Node(value));
         }
 
         void push_after(const T value, const T& previous) {
@@ -276,7 +276,7 @@ namespace collections {
             auto current = first_;
             while (current) {
                 if (current->value == previous) {
-                    push_after_node(current, new node(value));
+                    push_after_node(current, new Node(value));
 
                     return;
                 }
@@ -291,7 +291,7 @@ namespace collections {
             auto current = first_;
             while (current) {
                 if (current->value == next) {
-                    push_before_node(current, new node(value));
+                    push_before_node(current, new Node(value));
 
                     return;
                 }
@@ -303,8 +303,8 @@ namespace collections {
         void push_at(const T value, const size_t index) {
             const auto size = size_;
 
-            if (index == 0) push_first_node(new node(value));
-            else if (index == size) push_last_node(new node(value));
+            if (index == 0) push_first_node(new Node(value));
+            else if (index == size) push_last_node(new Node(value));
             else if (index > size) throw out_of_range("Index is greater than size");
             else {
                 if (index <= size << 1) {
@@ -313,7 +313,7 @@ namespace collections {
                     size_t next_index = 1;
                     while (true) {
                         if (next_index == index) {
-                            push_after_node(current, new node(value));
+                            push_after_node(current, new Node(value));
                             return;
                         }
 
@@ -326,7 +326,7 @@ namespace collections {
                     size_t current_index = size - 1;
                     while (true) {
                         if (current_index == index) {
-                            push_before_node(current, new node(value));
+                            push_before_node(current, new Node(value));
                             return;
                         }
 

@@ -4,7 +4,7 @@
 #include "collections/queue.h"
 #include "collections/linked_list.h"
 
-using collections::linked_list;
+using collections::LinkedList;
 using collections::stack;
 using collections::queue;
 using std::cin;
@@ -43,7 +43,7 @@ int main() {
 
     {
         cout << "Linked-List tests #1" << endl;
-        linked_list<long> list;
+        LinkedList<long> list;
         list.push_last(1);
         list.push_last(2);
         list.push_first(3);
