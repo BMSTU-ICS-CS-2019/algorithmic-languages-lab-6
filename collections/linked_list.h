@@ -17,10 +17,10 @@ namespace collections {
 
             friend class linked_list;
 
-            T value_;
-            node *previous_ = nullptr, *next_ = nullptr;
+            T value;
+            node *previous = nullptr, *next = nullptr;
 
-            explicit node(const T value): value_(value) {}
+            explicit node(const T value): value(value) {}
         };
 
         size_t size_ = 0;
@@ -28,7 +28,7 @@ namespace collections {
 
     protected:
 
-        node * at_(const size_t index) const {
+        node * node_at(const size_t index) const {
             const auto size = size_;
 
             if (index >= size) throw out_of_range("Index is out of range");
@@ -39,7 +39,7 @@ namespace collections {
                 while (current) {
                     if (current_index == index) return current;
 
-                    current = current->next_;
+                    current = current->next;
                     ++current_index;
                 }
             } else { // lookup from tail
@@ -49,59 +49,59 @@ namespace collections {
                     --current_index;
                     if (current_index == index) return current;
 
-                    current = current->next_;
+                    current = current->next;
                 }
             }
         }
 
-        inline void push_first_(node * const pushed) {
+        inline void push_first_node(node * const pushed) {
             if (size_ == 0) first_ = last_ = pushed;
             else {
                 // double-link head
-                pushed->next_ = first_;
-                first_->previous_ = pushed;
+                pushed->next = first_;
+                first_->previous = pushed;
                 first_ = pushed;
             }
 
             ++size_;
         }
 
-        inline void push_last_(node * const pushed) {
+        inline void push_last_node(node * const pushed) {
             if (size_ == 0) first_ = last_ = pushed;
             else {
-                pushed->previous_ = last_;
-                last_->next_ = pushed;
+                pushed->previous = last_;
+                last_->next = pushed;
                 last_ = pushed;
             }
 
             ++size_;
         }
 
-        inline void push_after_(node * const previous, node * const pushed) {
-            const auto old_next = previous->next_;
-            if (old_next) old_next->previous_ = pushed;
+        inline void push_after_node(node * const previous, node * const pushed) {
+            const auto old_next = previous->next;
+            if (old_next) old_next->previous = pushed;
             else last_ = pushed;
 
-            pushed->previous_ = previous;
-            pushed->next_ = old_next;
-            previous->next_ = pushed;
+            pushed->previous = previous;
+            pushed->next = old_next;
+            previous->next = pushed;
 
             ++size_;
         }
 
-        inline void push_before_(const node *next, const node *pushed) {
-            const auto old_previous = next->previous_;
-            if (old_previous) old_previous->next_ = pushed;
+        inline void push_before_node(const node *next, const node *pushed) {
+            const auto old_previous = next->previous;
+            if (old_previous) old_previous->next = pushed;
             else first_ = pushed;
 
-            pushed->next_ = next;
-            pushed->previous_ = old_previous;
-            next->previous_ = pushed;
+            pushed->next = next;
+            pushed->previous = old_previous;
+            next->previous = pushed;
 
             ++size_;
         }
 
-        inline T pop_first_() {
+        inline T pop_first_node() {
             switch (size_) {
                 case 0: throw out_of_range("Attempt to pop a value from a non-empty collection");
                 case 1: {
@@ -109,17 +109,17 @@ namespace collections {
                     first_ = last_ = nullptr;
 
                     size_ = 0;
-                    const auto value = popped->value_;
+                    const auto value = popped->value;
                     delete popped;
 
                     return value;
                 }
                 default: {
                     const auto popped = first_;
-                    first_ = popped->next_;
+                    first_ = popped->next;
 
                     --size_;
-                    const auto value = popped->value_;
+                    const auto value = popped->value;
                     delete popped;
 
                     return value;
@@ -127,7 +127,7 @@ namespace collections {
             }
         }
 
-        inline void pop_first_no_return_() {
+        inline void pop_first_node_no_return() {
             switch (size_) {
                 case 0: throw out_of_range("Attempt to pop a value from a non-empty collection");
                 case 1: {
@@ -139,7 +139,7 @@ namespace collections {
                 }
                 default: {
                     const auto popped = first_;
-                    first_ = popped->next_;
+                    first_ = popped->next;
 
                     --size_;
                     delete popped;
@@ -147,7 +147,7 @@ namespace collections {
             }
         }
 
-        inline T pop_last_() {
+        inline T pop_last_node() {
             switch (size_) {
                 case 0: throw out_of_range("Attempt to pop a value from a non-empty collection");
                 case 1: {
@@ -155,17 +155,17 @@ namespace collections {
                     first_ = last_ = nullptr;
 
                     size_ = 0;
-                    const auto value = popped->value_;
+                    const auto value = popped->value;
                     delete popped;
 
                     return value;
                 }
                 default: {
                     const auto popped = last_;
-                    last_ = popped->previous_;
+                    last_ = popped->previous;
 
                     --size_;
-                    const auto value = popped->value_;
+                    const auto value = popped->value;
                     delete popped;
 
                     return value;
@@ -173,7 +173,7 @@ namespace collections {
             }
         }
 
-        inline void pop_last_no_return_() {
+        inline void pop_last_node_no_return() {
             switch (size_) {
                 case 0: throw out_of_range("Attempt to pop a value from a non-empty collection");
                 case 1: {
@@ -185,7 +185,7 @@ namespace collections {
                 }
                 default: {
                     const auto popped = last_;
-                    last_ = popped->previous_;
+                    last_ = popped->previous;
 
                     --size_;
                     delete popped;
@@ -193,51 +193,51 @@ namespace collections {
             }
         }
 
-        inline T pop_(const node *popped) {
+        inline T pop_node(const node *popped) {
             const auto first = first_;
             if (popped == first) {
                 if (popped == last_) first_ = last_ = nullptr; // pop the only one
                 else { // simply pop the first
-                    first_ = first->next_;
-                    first->next_->previous_ = nullptr;
+                    first_ = first->next;
+                    first->next->previous = nullptr;
                 }
             } else {
                 auto last = last_;
                 if (popped == last) { // simply pop the last
                     // popped != first
-                    last = last->previous_;
-                    last->previous_->next_ = nullptr;
+                    last = last->previous;
+                    last->previous->next = nullptr;
                 } else { // pop non-border
-                    const auto previous = popped->previous_, next = popped->next_;
-                    previous->next_ = next;
-                    next->previous_ = previous;
+                    const auto previous = popped->previous, next = popped->next;
+                    previous->next = next;
+                    next->previous = previous;
                 }
             }
 
             --size_;
-            const auto value = popped->value_;
+            const auto value = popped->value;
             delete popped;
             return value;
         }
 
-        inline void pop_no_return_(const node * popped) {
+        inline void pop_node_no_return(const node * popped) {
             const auto first = first_;
             if (popped == first) {
                 if (popped == last_) first_ = last_ = nullptr; // pop the only one
                 else { // simply pop the first
-                    first_ = first->next_;
-                    first->next_->previous_ = nullptr;
+                    first_ = first->next;
+                    first->next->previous = nullptr;
                 }
             } else {
                 auto last = last_;
                 if (popped == last) { // simply pop the last
                     // popped != first
-                    last = last->previous_;
-                    last->previous_->next_ = nullptr;
+                    last = last->previous;
+                    last->previous->next = nullptr;
                 } else { // pop non-border
-                    const auto previous = popped->previous_, next = popped->next_;
-                    previous->next_ = next;
-                    next->previous_ = previous;
+                    const auto previous = popped->previous, next = popped->next;
+                    previous->next = next;
+                    next->previous = previous;
                 }
             }
 
@@ -252,7 +252,7 @@ namespace collections {
         ~linked_list() {
             auto current = first_;
             while (current) {
-                const auto next = current->next_;
+                const auto next = current->next;
                 delete current;
                 current = next;
             }
@@ -263,11 +263,11 @@ namespace collections {
         }
 
         void push_first(const T value) {
-            push_first_(new node(value));
+            push_first_node(new node(value));
         }
 
         void push_last(const T value) {
-            push_last_(new node(value));
+            push_last_node(new node(value));
         }
 
         void push_after(const T value, const T& previous) {
@@ -275,13 +275,13 @@ namespace collections {
 
             auto current = first_;
             while (current) {
-                if (current->value_ == previous) {
-                    push_after_(current, new node(value));
+                if (current->value == previous) {
+                    push_after_node(current, new node(value));
 
                     return;
                 }
 
-                current = current->next_;
+                current = current->next;
             }
         }
 
@@ -290,21 +290,21 @@ namespace collections {
 
             auto current = first_;
             while (current) {
-                if (current->value_ == next) {
-                    push_before_(current, new node(value));
+                if (current->value == next) {
+                    push_before_node(current, new node(value));
 
                     return;
                 }
 
-                current = current->next_;
+                current = current->next;
             }
         }
 
         void push_at(const T value, const size_t index) {
             const auto size = size_;
 
-            if (index == 0) push_first_(new node(value));
-            else if (index == size) push_last_(new node(value));
+            if (index == 0) push_first_node(new node(value));
+            else if (index == size) push_last_node(new node(value));
             else if (index > size) throw out_of_range("Index is greater than size");
             else {
                 if (index <= size << 1) {
@@ -313,11 +313,11 @@ namespace collections {
                     size_t next_index = 1;
                     while (true) {
                         if (next_index == index) {
-                            push_after_(current, new node(value));
+                            push_after_node(current, new node(value));
                             return;
                         }
 
-                        current = current->next_;
+                        current = current->next;
                         ++next_index;
                     }
                 } else {
@@ -326,11 +326,11 @@ namespace collections {
                     size_t current_index = size - 1;
                     while (true) {
                         if (current_index == index) {
-                            push_before_(current, new node(value));
+                            push_before_node(current, new node(value));
                             return;
                         }
 
-                        current = current->previous_;
+                        current = current->previous;
                         --current_index;
                     }
                 }
@@ -338,11 +338,11 @@ namespace collections {
         }
 
         T pop_first() {
-            return pop_first_();
+            return pop_first_node();
         }
 
         T pop_last() {
-            return pop_last_();
+            return pop_last_node();
         }
 
         void pop_one(const T &value) {
@@ -350,25 +350,25 @@ namespace collections {
 
             auto current = first_;
             while (current) {
-                if (current->value_ == value) {
-                    pop_no_return_(current);
+                if (current->value == value) {
+                    pop_node_no_return(current);
                     return;
                 }
 
-                current = current->next_;
+                current = current->next;
             }
         }
 
         T pop_at(const size_t index) {
-            return pop_(at_(index));
+            return pop_node(node_at(index));
         }
 
         bool contains(const T &value) const {
             auto current = first_;
             while (current) {
-                if (current->value_ == value) return true;
+                if (current->value == value) return true;
 
-                current = current->next_;
+                current = current->next;
             }
 
             return false;
@@ -378,9 +378,9 @@ namespace collections {
             auto current = first_;
             size_t index = 0;
             while (current) {
-                if (current->value_ == value) return index;
+                if (current->value == value) return index;
 
-                current = current->next_;
+                current = current->next;
                 ++index;
             }
 
@@ -388,7 +388,7 @@ namespace collections {
         }
 
         inline T at(const size_t index) const {
-            return at_(index)->value_;
+            return node_at(index)->value;
         }
 
         template <typename CONSUMER>
@@ -398,9 +398,9 @@ namespace collections {
             auto current = first_;
             size_t index = 0;
             while (current) {
-                consumer(current->value_);
+                consumer(current->value);
 
-                current = current->next_;
+                current = current->next;
                 ++index;
             }
         }
@@ -412,9 +412,9 @@ namespace collections {
             auto current = first_;
             size_t index = 0;
             while (current) {
-                consumer(index, current->value_);
+                consumer(index, current->value);
 
-                current = current->next_;
+                current = current->next;
                 ++index;
             }
         }
