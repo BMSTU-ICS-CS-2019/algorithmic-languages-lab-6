@@ -102,5 +102,86 @@ void stack_repl() noexcept {
 }
 
 void linked_list_repl() noexcept {
-
+    LinkedList<string> list;
+    while (true) {
+        MAIN_CLI_READ_VALUE_WITH_MESSAGE(
+                string, action,
+                "Enter action (`push_first`, `push_last`, `push_after`, `push_before`, `push_at`, "
+                "`pop_first`, `pop_last`, `pop_at`, `pop_one`, `contains`, `index_of`, `size`, `print` or `exit`)"
+        )
+        if (action == "push_first") {
+            MAIN_CLI_READ_VALUE(string, value)
+            list.push_first(value);
+            cout << "Pushed \"" << value << "\"" << endl;
+        } else if (action == "push_last") {
+            MAIN_CLI_READ_VALUE(string, value)
+            list.push_last(value);
+            cout << "Pushed \"" << value << "\"" << endl;
+        } else if (action == "push_after") {
+            MAIN_CLI_READ_VALUE(string, previous)
+            MAIN_CLI_READ_VALUE(string, value)
+            list.push_after(previous, value);
+            cout << "Pushed \"" << value << "\"" << endl;
+        } else if (action == "push_before") {
+            MAIN_CLI_READ_VALUE(string, next)
+            MAIN_CLI_READ_VALUE(string, value)
+            list.push_before(next, value);
+            cout << "Pushed \"" << value << "\"" << endl;
+        } else if (action == "push_at") {
+            MAIN_CLI_READ_VALUE(size_t, index)
+            MAIN_CLI_READ_VALUE(string, value)
+            try {
+                list.push_at(index, value);
+            } catch (const out_of_range &e) {
+                cout << "Could not push value \"" << value << "\" at index " << index << ": " << e.what();
+                continue;
+            }
+            cout << "Pushed \"" << value << "\"" << endl;
+        } else if (action == "pop_first") {
+            string popped;
+            try {
+                popped = list.pop_first();
+            } catch (const out_of_range &e) {
+                cout << "Could not pop any value: " << e.what() << endl;
+                continue;
+            }
+            cout << "Popped \"" << popped << "\"" << endl;
+        } else if (action == "pop_last") {
+            string popped;
+            try {
+                popped = list.pop_last();
+            } catch (const out_of_range &e) {
+                cout << "Could not pop any value: " << e.what() << endl;
+                continue;
+            }
+            cout << "Popped \"" << popped << "\"" << endl;
+        } else if (action == "pop_at") {
+            MAIN_CLI_READ_VALUE(size_t, index)
+            string popped;
+            try {
+                popped = list.pop_at(index);
+            } catch (const out_of_range &e) {
+                cout << "Could not pop value at index " << index << ": " << e.what() << endl;
+                continue;
+            }
+            cout << "Popped \"" << popped << "\"" << endl;
+        } else if (action == "pop_one") {
+            MAIN_CLI_READ_VALUE(string, value)
+            list.pop_one(value);
+            cout << "Popped \"" << value << "\"" << endl;
+        } else if (action == "contains") {
+            MAIN_CLI_READ_VALUE(string, value)
+            cout << (list.contains(value) ? "List contains \"" : "List does not contain \"") << value << "\"" << endl;
+        } else if (action == "index_of") {
+            MAIN_CLI_READ_VALUE(string, value)
+            const auto index = list.index_of(value);
+            if (index >= 0) cout << "Index of \"" << value << "\" is " << index << endl;
+            else cout << "List does not contain \"" << value << "\"" << endl;
+        } else if (action == "size") cout << "Size is " << list.size() << endl;
+        else if (action == "print") list.for_each_indexed([](const size_t &index, const string &value) {
+            cout << "[" << index << "] = " << value << endl;
+        });
+        else if (action == "exit") break;
+        else cout << "Unknown action" << endl;
+    }
 }
