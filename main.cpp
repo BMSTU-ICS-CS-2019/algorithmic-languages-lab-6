@@ -5,8 +5,8 @@
 #include "collections/linked_list.h"
 
 using collections::LinkedList;
-using collections::stack;
-using collections::queue;
+using collections::Stack;
+using collections::Queue;
 using std::cin;
 using std::cout;
 using std::endl;
@@ -14,7 +14,7 @@ using std::endl;
 int main() {
     {
         cout << "Queue tests" << endl;
-        queue<long> queue;
+        Queue<long> queue;
         queue.push(1);
         queue.push(2);
         queue.push(3);
@@ -22,21 +22,21 @@ int main() {
         queue.pop();
         queue.push(5);
 
-        queue.for_each_indexed([](const size_t &index, const long& value) {
+        queue.for_each_indexed([](const size_t &index, const long &value) {
             cout << "[" << index << "] = " << value << endl;
         });
     }
 
     {
         cout << "Stack tests" << endl;
-        stack<long> stack;
+        Stack<long> stack;
         stack.push(1);
         stack.push(2);
         stack.push(3);
         stack.push(4);
         stack.push(5);
 
-        stack.for_each_indexed([](const size_t &index, const long& value) {
+        stack.for_each_indexed([](const size_t &index, const long &value) {
             cout << "[" << index << "] = " << value << endl;
         });
     }
@@ -54,14 +54,14 @@ int main() {
         list += 13;
         list += 1212;
         list += 17;
-        list.for_each_indexed([](const size_t &index, const long& value) {
+        list.for_each_indexed([](const size_t &index, const long &value) {
             cout << "[" << index << "] = " << value << endl;
         });
         cout << "Linked-List tests #2" << endl;
         list -= 13;
         list -= 13;
         list.pop_at(2);
-        list.for_each_indexed([](const size_t &index, const long& value) {
+        list.for_each_indexed([](const size_t &index, const long &value) {
             cout << "[" << index << "] = " << value << endl;
         });
     }
