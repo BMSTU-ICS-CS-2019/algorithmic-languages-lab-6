@@ -17,10 +17,10 @@ namespace collections {
 
             friend class LinkedList;
 
-            T value;
-            Node *previous = nullptr, *next = nullptr;
+            T value_;
+            Node *previous_ = nullptr, *next_ = nullptr;
 
-            explicit Node(const T value): value(value) {}
+            explicit Node(const T value): value_(value) {}
         };
 
         size_t size_ = 0;
@@ -39,7 +39,7 @@ namespace collections {
                 while (current) {
                     if (current_index == index) return current;
 
-                    current = current->next;
+                    current = current->next_;
                     ++current_index;
                 }
             } else { // lookup from tail
@@ -49,7 +49,7 @@ namespace collections {
                     --current_index;
                     if (current_index == index) return current;
 
-                    current = current->next;
+                    current = current->next_;
                 }
             }
         }
@@ -58,8 +58,8 @@ namespace collections {
             if (size_ == 0) first_ = last_ = pushed;
             else {
                 // double-link head
-                pushed->next = first_;
-                first_->previous = pushed;
+                pushed->next_ = first_;
+                first_->previous_ = pushed;
                 first_ = pushed;
             }
 
@@ -69,8 +69,8 @@ namespace collections {
         inline void push_last_node(Node * const pushed) {
             if (size_ == 0) first_ = last_ = pushed;
             else {
-                pushed->previous = last_;
-                last_->next = pushed;
+                pushed->previous_ = last_;
+                last_->next_ = pushed;
                 last_ = pushed;
             }
 
@@ -78,25 +78,25 @@ namespace collections {
         }
 
         inline void push_after_node(Node * const previous, Node * const pushed) {
-            const auto old_next = previous->next;
-            if (old_next) old_next->previous = pushed;
+            const auto old_next = previous->next_;
+            if (old_next) old_next->previous_ = pushed;
             else last_ = pushed;
 
-            pushed->previous = previous;
-            pushed->next = old_next;
-            previous->next = pushed;
+            pushed->previous_ = previous;
+            pushed->next_ = old_next;
+            previous->next_ = pushed;
 
             ++size_;
         }
 
         inline void push_before_node(const Node *next, const Node *pushed) {
-            const auto old_previous = next->previous;
-            if (old_previous) old_previous->next = pushed;
+            const auto old_previous = next->previous_;
+            if (old_previous) old_previous->next_ = pushed;
             else first_ = pushed;
 
-            pushed->next = next;
-            pushed->previous = old_previous;
-            next->previous = pushed;
+            pushed->next_ = next;
+            pushed->previous_ = old_previous;
+            next->previous_ = pushed;
 
             ++size_;
         }
@@ -109,17 +109,17 @@ namespace collections {
                     first_ = last_ = nullptr;
 
                     size_ = 0;
-                    const auto value = popped->value;
+                    const auto value = popped->value_;
                     delete popped;
 
                     return value;
                 }
                 default: {
                     const auto popped = first_;
-                    first_ = popped->next;
+                    first_ = popped->next_;
 
                     --size_;
-                    const auto value = popped->value;
+                    const auto value = popped->value_;
                     delete popped;
 
                     return value;
@@ -139,7 +139,7 @@ namespace collections {
                 }
                 default: {
                     const auto popped = first_;
-                    first_ = popped->next;
+                    first_ = popped->next_;
 
                     --size_;
                     delete popped;
@@ -155,17 +155,17 @@ namespace collections {
                     first_ = last_ = nullptr;
 
                     size_ = 0;
-                    const auto value = popped->value;
+                    const auto value = popped->value_;
                     delete popped;
 
                     return value;
                 }
                 default: {
                     const auto popped = last_;
-                    last_ = popped->previous;
+                    last_ = popped->previous_;
 
                     --size_;
-                    const auto value = popped->value;
+                    const auto value = popped->value_;
                     delete popped;
 
                     return value;
@@ -185,7 +185,7 @@ namespace collections {
                 }
                 default: {
                     const auto popped = last_;
-                    last_ = popped->previous;
+                    last_ = popped->previous_;
 
                     --size_;
                     delete popped;
@@ -198,24 +198,24 @@ namespace collections {
             if (popped == first) {
                 if (popped == last_) first_ = last_ = nullptr; // pop the only one
                 else { // simply pop the first
-                    first_ = first->next;
-                    first->next->previous = nullptr;
+                    first_ = first->next_;
+                    first->next_->previous_ = nullptr;
                 }
             } else {
                 auto last = last_;
                 if (popped == last) { // simply pop the last
                     // popped != first
-                    last = last->previous;
-                    last->previous->next = nullptr;
+                    last = last->previous_;
+                    last->previous_->next_ = nullptr;
                 } else { // pop non-border
-                    const auto previous = popped->previous, next = popped->next;
-                    previous->next = next;
-                    next->previous = previous;
+                    const auto previous = popped->previous_, next = popped->next_;
+                    previous->next_ = next;
+                    next->previous_ = previous;
                 }
             }
 
             --size_;
-            const auto value = popped->value;
+            const auto value = popped->value_;
             delete popped;
             return value;
         }
@@ -225,19 +225,19 @@ namespace collections {
             if (popped == first) {
                 if (popped == last_) first_ = last_ = nullptr; // pop the only one
                 else { // simply pop the first
-                    first_ = first->next;
-                    first->next->previous = nullptr;
+                    first_ = first->next_;
+                    first->next_->previous_ = nullptr;
                 }
             } else {
                 auto last = last_;
                 if (popped == last) { // simply pop the last
                     // popped != first
-                    last = last->previous;
-                    last->previous->next = nullptr;
+                    last = last->previous_;
+                    last->previous_->next_ = nullptr;
                 } else { // pop non-border
-                    const auto previous = popped->previous, next = popped->next;
-                    previous->next = next;
-                    next->previous = previous;
+                    const auto previous = popped->previous_, next = popped->next_;
+                    previous->next_ = next;
+                    next->previous_ = previous;
                 }
             }
 
@@ -252,7 +252,7 @@ namespace collections {
         ~LinkedList() {
             auto current = first_;
             while (current) {
-                const auto next = current->next;
+                const auto next = current->next_;
                 delete current;
                 current = next;
             }
@@ -275,13 +275,13 @@ namespace collections {
 
             auto current = first_;
             while (current) {
-                if (current->value == previous) {
+                if (current->value_ == previous) {
                     push_after_node(current, new Node(value));
 
                     return;
                 }
 
-                current = current->next;
+                current = current->next_;
             }
         }
 
@@ -290,13 +290,13 @@ namespace collections {
 
             auto current = first_;
             while (current) {
-                if (current->value == next) {
+                if (current->value_ == next) {
                     push_before_node(current, new Node(value));
 
                     return;
                 }
 
-                current = current->next;
+                current = current->next_;
             }
         }
 
@@ -317,7 +317,7 @@ namespace collections {
                             return;
                         }
 
-                        current = current->next;
+                        current = current->next_;
                         ++next_index;
                     }
                 } else {
@@ -330,7 +330,7 @@ namespace collections {
                             return;
                         }
 
-                        current = current->previous;
+                        current = current->previous_;
                         --current_index;
                     }
                 }
@@ -350,12 +350,12 @@ namespace collections {
 
             auto current = first_;
             while (current) {
-                if (current->value == value) {
+                if (current->value_ == value) {
                     pop_node_no_return(current);
                     return;
                 }
 
-                current = current->next;
+                current = current->next_;
             }
         }
 
@@ -366,9 +366,9 @@ namespace collections {
         bool contains(const T &value) const {
             auto current = first_;
             while (current) {
-                if (current->value == value) return true;
+                if (current->value_ == value) return true;
 
-                current = current->next;
+                current = current->next_;
             }
 
             return false;
@@ -378,9 +378,9 @@ namespace collections {
             auto current = first_;
             size_t index = 0;
             while (current) {
-                if (current->value == value) return index;
+                if (current->value_ == value) return index;
 
-                current = current->next;
+                current = current->next_;
                 ++index;
             }
 
@@ -388,7 +388,7 @@ namespace collections {
         }
 
         inline T at(const size_t index) const {
-            return node_at(index)->value;
+            return node_at(index)->value_;
         }
 
         template <typename CONSUMER>
@@ -398,9 +398,9 @@ namespace collections {
             auto current = first_;
             size_t index = 0;
             while (current) {
-                consumer(current->value);
+                consumer(current->value_);
 
-                current = current->next;
+                current = current->next_;
                 ++index;
             }
         }
@@ -412,9 +412,9 @@ namespace collections {
             auto current = first_;
             size_t index = 0;
             while (current) {
-                consumer(index, current->value);
+                consumer(index, current->value_);
 
-                current = current->next;
+                current = current->next_;
                 ++index;
             }
         }

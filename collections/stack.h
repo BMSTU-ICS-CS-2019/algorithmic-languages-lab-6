@@ -16,10 +16,10 @@ namespace collections {
 
             friend class Stack;
 
-            T value;
-            Node *next = nullptr;
+            T value_;
+            Node *next_ = nullptr;
 
-            explicit Node(const T value): value(value) {}
+            explicit Node(const T value): value_(value) {}
         };
 
         size_t size_ = 0;
@@ -31,7 +31,7 @@ namespace collections {
         ~Stack() {
             auto current = first_;
             while (current) {
-                const auto next = current->next;
+                const auto next = current->next_;
                 delete current;
                 current = next;
             }
@@ -43,7 +43,7 @@ namespace collections {
 
         void push(const T value) {
             const auto pushed = new Node(value);
-            pushed->next = first_;
+            pushed->next_ = first_;
             first_ = pushed;
 
             ++size_;
@@ -54,8 +54,8 @@ namespace collections {
 
             const auto popped = first_;
             if (popped) {
-                first_ = popped->next;
-                const auto value = popped->value;
+                first_ = popped->next_;
+                const auto value = popped->value_;
                 delete popped;
 
                 --size_;
@@ -71,9 +71,9 @@ namespace collections {
             auto current = first_;
             size_t index = 0;
             while (current) {
-                consumer(current->value);
+                consumer(current->value_);
 
-                current = current->next;
+                current = current->next_;
                 ++index;
             }
         }
@@ -85,9 +85,9 @@ namespace collections {
             auto current = first_;
             size_t index = 0;
             while (current) {
-                consumer(index, current->value);
+                consumer(index, current->value_);
 
-                current = current->next;
+                current = current->next_;
                 ++index;
             }
         }

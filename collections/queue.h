@@ -17,10 +17,10 @@ namespace collections {
 
             friend class Queue;
 
-            T value;
-            Node *next = nullptr;
+            T value_;
+            Node *next_ = nullptr;
 
-            explicit Node(const T value): value(value) {}
+            explicit Node(const T value): value_(value) {}
         };
 
         size_t size_ = 0;
@@ -32,7 +32,7 @@ namespace collections {
         ~Queue() {
             auto current = first_;
             while (current) {
-                const auto next = current->next;
+                const auto next = current->next_;
                 delete current;
                 current = next;
             }
@@ -45,7 +45,7 @@ namespace collections {
         void push(const T value) {
             const auto pushed = new Node(value);
             if (first_) {
-                last_->next = pushed;
+                last_->next_ = pushed;
                 last_ = pushed;
             } else first_ = last_ = pushed;
 
@@ -57,10 +57,10 @@ namespace collections {
 
             const auto popped = first_;
             if (popped) {
-                first_ = popped->next;
+                first_ = popped->next_;
                 if (!first_) last_ = nullptr;
 
-                const auto value = popped->value;
+                const auto value = popped->value_;
                 delete popped;
 
                 --size_;
@@ -76,9 +76,9 @@ namespace collections {
             auto current = first_;
             size_t index = 0;
             while (current) {
-                consumer(current->value);
+                consumer(current->value_);
 
-                current = current->next;
+                current = current->next_;
                 ++index;
             }
         }
@@ -90,9 +90,9 @@ namespace collections {
             auto current = first_;
             size_t index = 0;
             while (current) {
-                consumer(index, current->value);
+                consumer(index, current->value_);
 
-                current = current->next;
+                current = current->next_;
                 ++index;
             }
         }
