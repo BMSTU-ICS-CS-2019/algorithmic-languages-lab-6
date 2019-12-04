@@ -1,6 +1,7 @@
 #ifndef LAB_6_LINKED_LIST_H
 #define LAB_6_LINKED_LIST_H
 
+#include "abstract_collection.h"
 #include <cstddef>
 #include <stdexcept>
 
@@ -9,7 +10,7 @@ using std::out_of_range;
 namespace collections {
 
     template <typename T>
-    class LinkedList {
+    class LinkedList : AbstractCollection<T> {
 
         /* ***************************************** Implementation details ***************************************** */
 
@@ -23,13 +24,12 @@ namespace collections {
             explicit Node(const T value): value_(value) {}
         };
 
-        size_t size_ = 0;
         Node *first_ = nullptr, *last_ = nullptr;
 
     protected:
 
         Node * node_at(const size_t index) const {
-            const auto size = size_;
+            const auto size = this->size_;
 
             if (index >= size) throw out_of_range("Index is out of range");
 
@@ -55,7 +55,7 @@ namespace collections {
         }
 
         inline void push_first_node(Node * const pushed) {
-            if (size_ == 0) first_ = last_ = pushed;
+            if (this->size_ == 0) first_ = last_ = pushed;
             else {
                 // double-link head
                 pushed->next_ = first_;
@@ -63,18 +63,18 @@ namespace collections {
                 first_ = pushed;
             }
 
-            ++size_;
+            ++this->size_;
         }
 
         inline void push_last_node(Node * const pushed) {
-            if (size_ == 0) first_ = last_ = pushed;
+            if (this->size_ == 0) first_ = last_ = pushed;
             else {
                 pushed->previous_ = last_;
                 last_->next_ = pushed;
                 last_ = pushed;
             }
 
-            ++size_;
+            ++this->size_;
         }
 
         inline void push_after_node(Node * const previous, Node * const pushed) {
@@ -86,7 +86,7 @@ namespace collections {
             pushed->next_ = old_next;
             previous->next_ = pushed;
 
-            ++size_;
+            ++this->size_;
         }
 
         inline void push_before_node(Node * const next, Node * const pushed) {
@@ -98,17 +98,17 @@ namespace collections {
             pushed->previous_ = old_previous;
             next->previous_ = pushed;
 
-            ++size_;
+            ++this->size_;
         }
 
         inline T pop_first_node() {
-            switch (size_) {
+            switch (this->size_) {
                 case 0: throw out_of_range("Attempt to pop a value from a non-empty collection");
                 case 1: {
                     const auto popped = first_;
                     first_ = last_ = nullptr;
 
-                    size_ = 0;
+                    this->size_ = 0;
                     const auto value = popped->value_;
                     delete popped;
 
@@ -118,7 +118,7 @@ namespace collections {
                     const auto popped = first_;
                     first_ = popped->next_;
 
-                    --size_;
+                    --this->size_;
                     const auto value = popped->value_;
                     delete popped;
 
@@ -128,33 +128,33 @@ namespace collections {
         }
 
         inline void pop_first_node_no_return() {
-            switch (size_) {
+            switch (this->size_) {
                 case 0: throw out_of_range("Attempt to pop a value from a non-empty collection");
                 case 1: {
                     const auto popped = first_;
                     first_ = last_ = nullptr;
 
-                    size_ = 0;
+                    this->size_ = 0;
                     delete popped;
                 }
                 default: {
                     const auto popped = first_;
                     first_ = popped->next_;
 
-                    --size_;
+                    --this->size_;
                     delete popped;
                 }
             }
         }
 
         inline T pop_last_node() {
-            switch (size_) {
+            switch (this->size_) {
                 case 0: throw out_of_range("Attempt to pop a value from a non-empty collection");
                 case 1: {
                     const auto popped = last_;
                     first_ = last_ = nullptr;
 
-                    size_ = 0;
+                    this->size_ = 0;
                     const auto value = popped->value_;
                     delete popped;
 
@@ -164,7 +164,7 @@ namespace collections {
                     const auto popped = last_;
                     last_ = popped->previous_;
 
-                    --size_;
+                    --this->size_;
                     const auto value = popped->value_;
                     delete popped;
 
@@ -174,20 +174,20 @@ namespace collections {
         }
 
         inline void pop_last_node_no_return() {
-            switch (size_) {
+            switch (this->size_) {
                 case 0: throw out_of_range("Attempt to pop a value from a non-empty collection");
                 case 1: {
                     const auto popped = last_;
                     first_ = last_ = nullptr;
 
-                    size_ = 0;
+                    this->size_ = 0;
                     delete popped;
                 }
                 default: {
                     const auto popped = last_;
                     last_ = popped->previous_;
 
-                    --size_;
+                    --this->size_;
                     delete popped;
                 }
             }
@@ -214,7 +214,7 @@ namespace collections {
                 }
             }
 
-            --size_;
+            --this->size_;
             const auto value = popped->value_;
             delete popped;
             return value;
@@ -242,7 +242,7 @@ namespace collections {
             }
 
 
-            --size_;
+            --this->size_;
             delete popped;
         }
 
@@ -259,7 +259,7 @@ namespace collections {
         }
 
         [[nodiscard]] size_t size() const {
-            return size_;
+            return this->size_;
         }
 
         void push_first(const T value) {
@@ -271,7 +271,7 @@ namespace collections {
         }
 
         void push_after(const T &previous, const T value) {
-            if (size_ == 0) return;
+            if (this->size_ == 0) return;
 
             auto current = first_;
             while (current) {
@@ -286,7 +286,7 @@ namespace collections {
         }
 
         void push_before(const T &next, const T value) {
-            if (size_ == 0) return;
+            if (this->size_ == 0) return;
 
             auto current = first_;
             while (current) {
@@ -301,7 +301,7 @@ namespace collections {
         }
 
         void push_at(const size_t index, const T value) {
-            const auto size = size_;
+            const auto size = this->size_;
 
             if (index == 0) push_first_node(new Node(value));
             else if (index == size) push_last_node(new Node(value));
@@ -346,7 +346,7 @@ namespace collections {
         }
 
         bool pop(const T &value) {
-            if (size_ == 0) return false;
+            if (this->size_ == 0) return false;
 
             auto current = first_;
             while (current) {
@@ -395,7 +395,7 @@ namespace collections {
 
         template <typename CONSUMER>
         void for_each(const CONSUMER consumer) {
-            if (size_ == 0) return;
+            if (this->size_ == 0) return;
 
             auto current = first_;
             size_t index = 0;
@@ -409,7 +409,7 @@ namespace collections {
 
         template <typename BI_CONSUMER>
         void for_each_indexed(const BI_CONSUMER consumer) {
-            if (size_ == 0) return;
+            if (this->size_ == 0) return;
 
             auto current = first_;
             size_t index = 0;
@@ -436,7 +436,7 @@ namespace collections {
         }
 
         inline explicit operator size_t() const {
-            return size_;
+            return this->size_;
         }
     };
 }

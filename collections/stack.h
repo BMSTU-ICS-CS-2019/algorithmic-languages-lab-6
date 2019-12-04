@@ -1,6 +1,7 @@
 #ifndef LAB_6_STACK_H
 #define LAB_6_STACK_H
 
+#include "abstract_collection.h"
 #include <cstddef>
 #include <stdexcept>
 
@@ -9,7 +10,7 @@ using std::out_of_range;
 namespace collections {
 
     template <typename T>
-    class Stack {
+    class Stack : AbstractCollection<T> {
 
         /* ***************************************** Implementation details ***************************************** */
 
@@ -23,7 +24,6 @@ namespace collections {
             explicit Node(const T value): value_(value) {}
         };
 
-        size_t size_ = 0;
         Node *first_ = nullptr;
 
         /* ********************************************** API members ********************************************** */
@@ -39,7 +39,7 @@ namespace collections {
         }
 
         [[nodiscard]] size_t size() const {
-            return size_;
+            return this->size_;
         }
 
         void push(const T value) {
@@ -47,11 +47,11 @@ namespace collections {
             pushed->next_ = first_;
             first_ = pushed;
 
-            ++size_;
+            ++this->size_;
         }
 
         T pop() {
-            if (size_ == 0) throw out_of_range("Stack is empty so nothing can be popped from it");
+            if (this->size_ == 0) throw out_of_range("Stack is empty so nothing can be popped from it");
 
             const auto popped = first_;
             if (popped) {
@@ -59,7 +59,7 @@ namespace collections {
                 const auto value = popped->value_;
                 delete popped;
 
-                --size_;
+                --this->size_;
 
                 return value;
             }
@@ -67,7 +67,7 @@ namespace collections {
 
         template <typename CONSUMER>
         void for_each(const CONSUMER consumer) {
-            if (size_ == 0) return;
+            if (this->size_ == 0) return;
 
             auto current = first_;
             size_t index = 0;
@@ -81,7 +81,7 @@ namespace collections {
 
         template <typename BI_CONSUMER>
         void for_each_indexed(const BI_CONSUMER consumer) {
-            if (size_ == 0) return;
+            if (this->size_ == 0) return;
 
             auto current = first_;
             size_t index = 0;
