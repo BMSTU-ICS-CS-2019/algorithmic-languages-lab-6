@@ -2,6 +2,7 @@
 #define LAB_6_STACK_H
 
 #include <cstddef>
+#include <stdexcept>
 
 using std::out_of_range;
 
