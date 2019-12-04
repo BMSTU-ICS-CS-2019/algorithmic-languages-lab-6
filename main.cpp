@@ -103,11 +103,10 @@ void stack_repl() noexcept {
 void linked_list_repl() noexcept {
     LinkedList<string> list;
     while (true) {
-        MAIN_CLI_READ_VALUE_WITH_MESSAGE(
-                string, action,
+        const auto action = cli_read<string>(
                 "Enter action (`push_first`, `push_last`, `push_after`, `push_before`, `push_at`, "
                 "`pop_first`, `pop_last`, `pop_at`, `pop`, `contains`, `index_of`, `size`, `print` or `exit`)"
-        )
+        );
         if (action == "push_first") {
             const auto value = cli_read<string>("Enter value to push");
             list.push_first(value);
