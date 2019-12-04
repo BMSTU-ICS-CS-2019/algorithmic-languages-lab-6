@@ -3,4 +3,9 @@ project(lab_6)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(lab_6 main.cpp collections/queue.h collections/stack.h collections/linked_list.h collections/collection.h collections/abstract_collection.h util/cli_util.h)
+add_executable(
+        lab_6 main.cpp
+        collections/collection.h collections/abstract_collection.h
+        collections/queue.h collections/stack.h collections/linked_list.h
+        util/cli_util.h
+)
