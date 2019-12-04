@@ -42,7 +42,7 @@ namespace collections {
             return this->size_;
         }
 
-        void push(const T value) {
+        void push(const T &value) {
             const auto pushed = new Node(value);
             if (first_) {
                 last_->next_ = pushed;
