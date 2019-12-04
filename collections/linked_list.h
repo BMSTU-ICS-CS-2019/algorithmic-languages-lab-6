@@ -365,7 +365,7 @@ namespace collections {
             return pop_node(node_at(index));
         }
 
-        bool contains(const T &value) const {
+        bool contains(const T &value) const override {
             auto current = first_;
             while (current) {
                 if (current->value_ == value) return true;

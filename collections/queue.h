@@ -69,6 +69,16 @@ namespace collections {
             }
         }
 
+        bool contains(const T &value) const override {
+            auto current = first_;
+            while (current) {
+                if (current->value_ == value) return true;
+                current = current->next_;
+            }
+
+            return false;
+        }
+
         template <typename CONSUMER>
         void for_each(const CONSUMER consumer) {
             if (this->size_ == 0) return;

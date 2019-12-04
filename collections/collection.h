@@ -11,6 +11,8 @@ namespace collections {
 
     public:
         [[nodiscard]] virtual size_t size() const = 0;
+
+        virtual bool contains(const T &value) const = 0;
     };
 }
 
