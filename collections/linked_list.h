@@ -33,7 +33,7 @@ namespace collections {
 
             if (index >= size) throw out_of_range("Index is out of range");
 
-            if (index <= size << 1) { // lookup from head
+            if (index <= size >> 1) { // lookup from head
                 auto current = first_;
                 size_t current_index = 0;
                 while (current) {
@@ -103,7 +103,7 @@ namespace collections {
 
         inline T pop_first_node() {
             switch (this->size_) {
-                case 0: throw out_of_range("Attempt to pop a value from a non-empty collection");
+                case 0: throw out_of_range("Attempt to pop a value from an empty collection");
                 case 1: {
                     const auto popped = first_;
                     first_ = last_ = nullptr;
@@ -116,7 +116,9 @@ namespace collections {
                 }
                 default: {
                     const auto popped = first_;
-                    first_ = popped->next_;
+                    const auto new_first = popped->next_;
+                    new_first->previous_ = nullptr;
+                    first_ = new_first;
 
                     --this->size_;
                     const auto value = popped->value_;
@@ -129,16 +131,19 @@ namespace collections {
 
         inline void pop_first_node_no_return() {
             switch (this->size_) {
-                case 0: throw out_of_range("Attempt to pop a value from a non-empty collection");
+                case 0: throw out_of_range("Attempt to pop a value from an empty collection");
                 case 1: {
                     const auto popped = first_;
-                    first_ = last_ = nullptr;
+                    const auto new_first = popped->next_;
+                    new_first->previous_ = nullptr;
+                    first_ = new_first;
 
                     this->size_ = 0;
                     delete popped;
                 }
                 default: {
                     const auto popped = first_;
+                    popped->next_->previous_ = nullptr;
                     first_ = popped->next_;
 
                     --this->size_;
@@ -149,7 +154,7 @@ namespace collections {
 
         inline T pop_last_node() {
             switch (this->size_) {
-                case 0: throw out_of_range("Attempt to pop a value from a non-empty collection");
+                case 0: throw out_of_range("Attempt to pop a value from an empty collection");
                 case 1: {
                     const auto popped = last_;
                     first_ = last_ = nullptr;
@@ -162,7 +167,9 @@ namespace collections {
                 }
                 default: {
                     const auto popped = last_;
-                    last_ = popped->previous_;
+                    const auto new_last = popped->previous_;
+                    new_last->next_ = nullptr;
+                    last_ = new_last;
 
                     --this->size_;
                     const auto value = popped->value_;
@@ -175,7 +182,7 @@ namespace collections {
 
         inline void pop_last_node_no_return() {
             switch (this->size_) {
-                case 0: throw out_of_range("Attempt to pop a value from a non-empty collection");
+                case 0: throw out_of_range("Attempt to pop a value from an empty collection");
                 case 1: {
                     const auto popped = last_;
                     first_ = last_ = nullptr;
@@ -185,7 +192,9 @@ namespace collections {
                 }
                 default: {
                     const auto popped = last_;
-                    last_ = popped->previous_;
+                    const auto new_last = popped->previous_;
+                    new_last->next_ = nullptr;
+                    last_ = new_last;
 
                     --this->size_;
                     delete popped;
@@ -307,7 +316,7 @@ namespace collections {
             else if (index == size) push_last_node(new Node(value));
             else if (index > size) throw out_of_range("Index is greater than size");
             else {
-                if (index <= size << 1) {
+                if (index <= size >> 1) {
                     // go from the head
                     auto current = first_;
                     size_t next_index = 1;
@@ -358,7 +367,7 @@ namespace collections {
                 current = current->next_;
             }
 
-            return true;
+            return false;
         }
 
         T pop_at(const size_t index) {
