@@ -134,17 +134,16 @@ namespace collections {
                 case 0: throw out_of_range("Attempt to pop a value from an empty collection");
                 case 1: {
                     const auto popped = first_;
-                    const auto new_first = popped->next_;
-                    new_first->previous_ = nullptr;
-                    first_ = new_first;
+                    first_ = last_ = nullptr;
 
                     this->size_ = 0;
                     delete popped;
                 }
                 default: {
                     const auto popped = first_;
-                    popped->next_->previous_ = nullptr;
-                    first_ = popped->next_;
+                    const auto new_first = popped->next_;
+                    new_first->previous_ = nullptr;
+                    first_ = new_first;
 
                     --this->size_;
                     delete popped;
